@@ -1,0 +1,289 @@
+---
+title: "Unraveling the Mystery of Rarotongan Lagoon"
+subtitle: "Problem Set 1"
+author: "Ian Brunjes, Travis Christy, Karla Garibay"
+date: "1/14/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+library(tidyverse)
+library(ggpubr)
+library(here)
+library(patchwork)
+```
+
+# Identifying Patterns in the Data
+
+```{r, echo=FALSE, message=FALSE}
+adult_data <- read_csv(here("data", "mean_density_adult_organisms.csv"))
+adult_data$year <- as.factor(adult_data$year)
+young_data <- read_csv(here("data", "mean_density_young_fish.csv"))
+young_data$year <- as.factor(young_data$year)
+young_data <- young_data %>% filter(n_per_1_m2 != 0)
+```
+
+
+## 1. Patterns in Adult Organism Density across Year/Location
+
+```{r, echo=FALSE}
+organism_plots_adult_fish <- list()
+adult_data_fish <- adult_data %>% filter(type == "adult fish")
+for (spp in unique(adult_data_fish$species)) {
+  # Filter to organism
+  species_data <- adult_data_fish %>% filter(species == spp)
+  
+  ## Create plot for each organism
+  spp_plot <- ggplot(species_data, aes(fill = year, x = island, y = n_per_100_m2),) +
+    geom_bar(position = "dodge", stat = "identity") +
+    geom_errorbar(
+      aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+      width=0.4,
+      colour="orange",
+      alpha=0.9,
+      size=0.9,
+      position = position_dodge(0.9)
+    ) +
+    labs(
+      x = "",
+      y = "",
+      title = spp
+    ) +
+    theme(plot.title = element_text(size=10))
+  
+  organism_plots_adult_fish[[spp]] <- spp_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(organism_plots_adult_fish, ncol = 2) +
+  plot_annotation(title =  expression(paste("Adult Fish: Number per 100", m^{2}," of reef"))) +
+  plot_layout(guides = "collect")
+```
+
+
+```{r, echo=FALSE}
+organism_plots_adult_other <- list()
+adult_data_other <- adult_data %>% filter(type != "adult fish")
+for (spp in unique(adult_data_other$species)) {
+  # Filter to organism
+  species_data <- adult_data_other %>% filter(species == spp)
+  
+  ## Create plot for each organism
+  spp_plot <- ggplot(species_data, aes(fill = year, x = island, y = n_per_100_m2),) +
+    geom_bar(position = "dodge", stat = "identity") +
+    geom_errorbar(
+      aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+      width=0.4,
+      colour="orange",
+      alpha=0.9,
+      size=0.9,
+      position = position_dodge(0.9)
+    ) +
+    labs(
+      x = "",
+      y = "",
+      title = spp
+    ) +
+    theme(plot.title = element_text(size=10))
+  
+  organism_plots_adult_other[[spp]] <- spp_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(organism_plots_adult_other) +
+  plot_annotation(title =  expression(paste("Other Organisms: Amount of Bottom Covered (", m^{2}, ") per 100", m^{2}," of Reef"))) +
+  plot_layout(guides = "collect")
+```
+
+## 2. Patterns in New Recruit Density across Year/Location
+
+```{r, echo=FALSE}
+organism_plots_young <- list()
+for (spp in unique(young_data$fish)) {
+  # Filter to organism
+  species_data <- young_data %>% filter(fish == spp)
+  habitat <- unique(species_data["microhabitat"])[[1]]
+  ## Create plot for each organism
+  spp_plot <- ggplot(species_data, aes(fill = year, x = island, y = n_per_1_m2),) +
+    geom_bar(position = "dodge", stat = "identity") +
+    geom_errorbar(
+      aes(ymin = n_per_1_m2 - ci_95, ymax = n_per_1_m2 + ci_95),
+      width=0.4,
+      colour="orange",
+      alpha=0.9,
+      size=0.9,
+      position = position_dodge(0.9)
+    ) +
+    labs(
+      x = "",
+      y = "",
+      title = paste(spp, " (", habitat, ")", sep = "")
+    ) +
+    theme(plot.title = element_text(size=10))
+  
+  organism_plots_young[[spp]] <- spp_plot
+}
+```
+
+
+```{r, echo=FALSE}
+wrap_plots(organism_plots_young, ncol = 2, height = 3) +
+  plot_annotation(title = expression(paste("Young Fish: Number of new recruits per 1", m^{2}," of preferred microhabitat"))) +
+  plot_layout(guides = "collect")
+```
+
+
+
+
+## 3. Comparing Density of Adults and Recruits
+
+```{r, echo=FALSE}
+# Joining adult + recruit + preferred microhabitat data
+adult_recruit_join <- left_join(
+  adult_data_fish,
+  young_data,
+  by = c("species" = "fish", "year" = "year", "island" = "island"),
+  suffix = c("_adult", "_recruit")
+)
+
+full_join <- left_join(
+  adult_recruit_join,
+  adult_data_other,
+  by = c("microhabitat" = "species", "year" = "year", "island" = "island"),
+  suffix = c("_species", "_habitat")
+)
+
+# Calculating values for 3. & 5.
+full_join <- full_join %>% mutate(
+  recruits_per_100_m2 = n_per_1_m2 * n_per_100_m2_habitat,
+  adults_per_m2_microhabitat = n_per_100_m2_species / n_per_100_m2_habitat
+)
+
+```
+
+```{r, echo=FALSE}
+density_comparison_plots <- list()
+for (spp in unique(full_join$species)) {
+  # Filter to organism
+  species_data <- full_join %>% filter(species == spp)
+  
+  ## Create plot for each organism
+  spp_plot <- ggplot(species_data, aes(x = n_per_100_m2_species, y = recruits_per_100_m2)) +
+    geom_point(aes(color = year, shape = island)) +
+    labs(
+      x = "number of adults",
+      y = "number of recruits",
+      title = spp
+    ) +
+    geom_smooth(method = "lm", se=FALSE, color = "black", size = 0.2) +
+    stat_regline_equation(aes(label = ..rr.label..))
+  
+  density_comparison_plots[[spp]] <- spp_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(density_comparison_plots) +
+  plot_annotation(title = "Density of Adults versus New Recruits per 100m2 of Reef") +
+  plot_layout(guides = "collect")
+```
+
+## 4. Comparing Density of Adults with Area of Preferred Microhabitat
+```{r, echo=FALSE}
+density_microhabitat_plots <- list()
+for (spp in unique(full_join$species)) {
+  # Filter to organism
+  species_data <- full_join %>% filter(species == spp)
+  
+  ## Create plot for each organism
+  spp_plot <- ggplot(species_data, aes(x = n_per_100_m2_habitat, y = n_per_100_m2_species)) +
+    geom_point(aes(color = year, shape = island)) +
+    labs(
+      x = "area of preferred microhabitat",
+      y = "number of adults",
+      title = spp
+    ) +
+    geom_smooth(method = "lm", se=FALSE, color = "black", size = 0.2) +
+    stat_regline_equation(aes(label = ..rr.label..))
+  
+  density_microhabitat_plots[[spp]] <- spp_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(density_microhabitat_plots) +
+  plot_annotation(title = "Area of Microhabitat versus Density of Adults per 100 m2 of Reef") +
+  plot_layout(guides = "collect")
+```
+
+## 5. Density of Adult Fish per Area of Microhabitat preferred by Young
+
+```{r, echo=FALSE}
+density_per_microhabitat_plots <- list()
+for (spp in unique(full_join$species)) {
+  # Filter to organism
+  species_data <- full_join %>% filter(species == spp)
+  habitat <- unique(species_data["microhabitat"])[[1]]
+  ## Create plot for each species
+  spp_plot <- ggplot(species_data, aes(fill = year, x = island, y = adults_per_m2_microhabitat),) +
+    geom_bar(position = "dodge", stat = "identity") +
+    labs(
+      x = "",
+      y = "",
+      title = paste(spp, " (", habitat, ")", sep = "")
+    ) +
+    theme(plot.title = element_text(size=10))
+  
+  density_per_microhabitat_plots[[spp]] <- spp_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(density_per_microhabitat_plots) +
+  plot_annotation(title =  expression(paste("Number of adult fish per ", m^{2}," of microhabitat preferred by young"))) +
+  plot_layout(guides = "collect")
+```
+
+## 6. Comparing Density between each Species Pair
+
+```{r, echo=FALSE}
+# Get all possible pairs of fish species
+pairs <- combn(unique(adult_data_fish$species), 2)
+
+# For each pair, create plot
+pair_plots <- list()
+for (i in seq(dim(pairs)[2])) {
+  pair = pairs[,i]
+  s1 <- pair[1]
+  s2 <- pair[2]
+  
+  s1_data <- adult_data_fish %>% filter(species == s1)
+  s2_data <- adult_data_fish %>% filter(species == s2)
+  
+  s1_s2_join <- left_join(s1_data, s2_data, by = c("year" = "year", "island" = "island"), suffix = c("_s1", "_s2"))
+  
+  # create plot
+  pair_plot <- ggplot(s1_s2_join, aes(x = n_per_100_m2_s1, y = n_per_100_m2_s2)) +
+    geom_point(aes(color = year, shape = island)) +
+    labs(
+      x = s1,
+      y = s2
+    ) +
+    geom_smooth(method = "lm", se=FALSE, color = "black", size = 0.2) +
+    stat_regline_equation(aes(label = ..rr.label..))
+  
+  pair_plots[[paste(s1,s2)]] <- pair_plot
+}
+```
+
+```{r, echo=FALSE}
+wrap_plots(pair_plots) +
+  plot_annotation(title =  "Comparing Adult Fish Densities between Species") +
+  plot_layout(guides = "collect")
+```
+
+
+

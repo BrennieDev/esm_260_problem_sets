@@ -1,37 +1,37 @@
-﻿species,type,year,island,n_per_100_m2,ci_95
-Surgeonfish,adult fish,2009,Rarotonga,250,32
-Surgeonfish,adult fish,2009,Aitutaki,360,32
-Surgeonfish,adult fish,2018,Rarotonga,20,32
-Surgeonfish,adult fish,2018,Aitutaki,390,32
-Coral Trout,adult fish,2009,Rarotonga,120,21
-Coral Trout,adult fish,2009,Aitutaki,170,21
-Coral Trout,adult fish,2018,Rarotonga,4,21
-Coral Trout,adult fish,2018,Aitutaki,40,21
-Spotted Damselfish,adult fish,2009,Rarotonga,520,47
-Spotted Damselfish,adult fish,2009,Aitutaki,910,47
-Spotted Damselfish,adult fish,2018,Rarotonga,19,47
-Spotted Damselfish,adult fish,2018,Aitutaki,257,47
-Yellow Damselfish,adult fish,2009,Rarotonga,32,15
-Yellow Damselfish,adult fish,2009,Aitutaki,36,15
-Yellow Damselfish,adult fish,2018,Rarotonga,90,15
-Yellow Damselfish,adult fish,2018,Aitutaki,80,15
-Mounding Corals,other,2009,Rarotonga,19.5,3.5
-Mounding Corals,other,2009,Aitutaki,14.5,3.5
-Mounding Corals,other,2018,Rarotonga,18,3.5
-Mounding Corals,other,2018,Aitutaki,15.9,3.5
-Coarse-branching Corals,other,2009,Rarotonga,2.8,0.5
-Coarse-branching Corals,other,2009,Aitutaki,3.2,0.5
-Coarse-branching Corals,other,2018,Rarotonga,0.7,0.5
-Coarse-branching Corals,other,2018,Aitutaki,2.4,0.5
-Fine-branching Corals,other,2009,Rarotonga,2.2,0.9
-Fine-branching Corals,other,2009,Aitutaki,2.5,0.9
-Fine-branching Corals,other,2018,Rarotonga,0.3,0.9
-Fine-branching Corals,other,2018,Aitutaki,3.2,0.9
-Sea Anenomes,other,2009,Rarotonga,1,0.1
-Sea Anenomes,other,2009,Aitutaki,1.8,0.1
-Sea Anenomes,other,2018,Rarotonga,0.5,0.1
-Sea Anenomes,other,2018,Aitutaki,0.9,0.1
-Algae,other,2009,Rarotonga,1.7,0.8
-Algae,other,2009,Aitutaki,0.8,0.8
-Algae,other,2018,Rarotonga,5.5,0.8
-Algae,other,2018,Aitutaki,0.4,0.8
+﻿species,type,attributes,year,island,n_per_100_m2,ci_95
+Surgeonfish,adult fish,herbivores,2006,Rarotonga,250,32
+Surgeonfish,adult fish,herbivores,2006,Aitutaki,360,32
+Surgeonfish,adult fish,herbivores,2021,Rarotonga,20,32
+Surgeonfish,adult fish,herbivores,2021,Aitutaki,390,32
+Coral Trout,adult fish,predators of adult fishes,2006,Rarotonga,120,21
+Coral Trout,adult fish,predators of adult fishes,2006,Aitutaki,170,21
+Coral Trout,adult fish,predators of adult fishes,2021,Rarotonga,4,21
+Coral Trout,adult fish,predators of adult fishes,2021,Aitutaki,40,21
+Spotted Damselfish,adult fish,eats zooplankton,2006,Rarotonga,520,47
+Spotted Damselfish,adult fish,eats zooplankton,2006,Aitutaki,910,47
+Spotted Damselfish,adult fish,eats zooplankton,2021,Rarotonga,19,47
+Spotted Damselfish,adult fish,eats zooplankton,2021,Aitutaki,257,47
+Yellow Damselfish,adult fish,eats zooplankton,2006,Rarotonga,32,15
+Yellow Damselfish,adult fish,eats zooplankton,2006,Aitutaki,36,15
+Yellow Damselfish,adult fish,eats zooplankton,2021,Rarotonga,90,15
+Yellow Damselfish,adult fish,eats zooplankton,2021,Aitutaki,80,15
+Mounding Corals,other,,2006,Rarotonga,19.5,3.5
+Mounding Corals,other,,2006,Aitutaki,14.5,3.5
+Mounding Corals,other,,2021,Rarotonga,18,3.5
+Mounding Corals,other,,2021,Aitutaki,15.9,3.5
+Coarse-branching Corals,other,,2006,Rarotonga,2.8,0.5
+Coarse-branching Corals,other,,2006,Aitutaki,3.2,0.5
+Coarse-branching Corals,other,,2021,Rarotonga,0.7,0.5
+Coarse-branching Corals,other,,2021,Aitutaki,2.4,0.5
+Fine-branching Corals,other,,2006,Rarotonga,2.2,0.9
+Fine-branching Corals,other,,2006,Aitutaki,2.5,0.9
+Fine-branching Corals,other,,2021,Rarotonga,0.3,0.9
+Fine-branching Corals,other,,2021,Aitutaki,3.2,0.9
+Sea Anenomes,other,,2006,Rarotonga,1,0.1
+Sea Anenomes,other,,2006,Aitutaki,1.8,0.1
+Sea Anenomes,other,,2021,Rarotonga,0.5,0.1
+Sea Anenomes,other,,2021,Aitutaki,0.9,0.1
+Algae,other,,2006,Rarotonga,1.7,0.8
+Algae,other,,2006,Aitutaki,0.8,0.8
+Algae,other,,2021,Rarotonga,5.5,0.8
+Algae,other,,2021,Aitutaki,0.4,0.8

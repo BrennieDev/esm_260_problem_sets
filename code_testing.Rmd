@@ -1,0 +1,181 @@
+---
+title: "Code Playground"
+author: "Ian Brunjes"
+date: "1/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stringr)
+library(here)
+library(patchwork)
+```
+
+# Identifying Patterns in the Data
+
+```{r, echo=FALSE, message=FALSE}
+adult_data <- read_csv(here("data", "mean_density_adult_organisms.csv"))
+adult_data$year <- fct_rev(as.factor(adult_data$year))
+young_data <- read_csv(here("data", "mean_density_young_fish.csv"))
+young_data$year <- fct_rev(as.factor(young_data$year))
+```
+
+
+## Mean Density of Adult Organisms per 100 m^2 of Reef
+
+```{r, echo=FALSE}
+# Plots for Rarotonga
+adult_raro_fish <- adult_data %>% filter(island == "Rarotonga", type == "adult fish")
+adult_raro_other <- adult_data %>% filter(island == "Rarotonga", type != "adult fish")
+
+## Rarotonga adult fish
+plot_arf <- ggplot(adult_raro_fish, aes(fill = year, x = species, y = n_per_100_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("number per 100 ", m^{2}," of reef")),
+    title = "Rarotonga"
+  ) +
+  ylim(-28,960) +
+  coord_flip()
+
+## Rarotonga other organisms
+plot_aro <- ggplot(adult_raro_other, aes(fill = year, x = species, y = n_per_100_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("amount of bottom covered (", m^{2}, ") per 100 ", m^{2}," of reef")),
+    title = "Rarotonga"
+  ) +
+  ylim(0,24) +
+  coord_flip()
+
+# Plots for Aitutaki
+adult_aitu_fish <- adult_data %>% filter(island == "Aitutaki", type == "adult fish")
+adult_aitu_other <- adult_data %>% filter(island == "Aitutaki", type != "adult fish")
+
+## Aitutaki adult fish
+plot_aaf <- ggplot(adult_aitu_fish, aes(fill = year, x = species, y = n_per_100_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("number per 100 ", m^{2}," of reef")),
+    title = "Aitutaki"
+  ) +
+  ylim(-28,960) +
+  coord_flip()
+
+## Aitutaki other organisms
+plot_aao <- ggplot(adult_aitu_other, aes(fill = year, x = species, y = n_per_100_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_100_m2 - ci_95, ymax = n_per_100_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("amount of bottom covered (", m^{2}, ") per 100 ", m^{2}," of reef")),
+    title = "Rarotonga"
+  ) +
+  ylim(0,24) +
+  coord_flip()
+```
+
+```{r, echo=FALSE}
+plot_arf / plot_aaf +
+  plot_annotation(title = "Adult Fish (Rarotango vs Aitutaki)") +
+  plot_layout(guides = "collect")
+```
+
+
+```{r, echo=FALSE}
+plot_aro / plot_aao +
+  plot_annotation(title = "Other Organisms (Rarotango vs Aitutaki)") +
+  plot_layout(guides = "collect")
+```
+
+## Mean Density of Newly Recruited Fish per 1 m^2 of Microhabitat
+
+```{r, echo=FALSE}
+# Plots for Rarotonga
+young_raro <- young_data %>% filter(island == "Rarotonga", n_per_1_m2 != 0)
+young_aitu <- young_data %>% filter(island == "Aitutaki", n_per_1_m2 != 0)
+
+## Rarotonga young fish
+plot_ryf <- ggplot(young_raro, aes(fill = year, x = fish, y = n_per_1_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_1_m2 - ci_95, ymax = n_per_1_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("number per 1 ", m^{2}," of preferred microhabitat")),
+    title = "Rarotonga"
+  ) +
+  ylim(-1,55) +
+  coord_flip()
+
+## Aitutaki young fish
+plot_ayf <- ggplot(young_aitu, aes(fill = year, x = fish, y = n_per_1_m2),) +
+  geom_bar(position = "dodge", stat = "identity") +
+  scale_fill_discrete(guide=guide_legend(reverse=T)) +
+  geom_errorbar(
+    aes(ymin = n_per_1_m2 - ci_95, ymax = n_per_1_m2 + ci_95),
+    width=0.4,
+    colour="orange",
+    alpha=0.9,
+    size=0.9,
+    position = position_dodge(0.9)
+  ) +
+  labs(
+    x = "",
+    y = expression(paste("number per 1 ", m^{2}," of preferred microhabitat")),
+    title = "Aitutaki"
+  ) +
+  ylim(-1,55) +
+  coord_flip()
+
+plot_ryf / plot_ayf +
+  plot_annotation(title = "New Recruits (Rarotonga vs Aitutaki)") +
+  plot_layout(guides = "collect")
+```

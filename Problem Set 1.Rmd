@@ -171,11 +171,11 @@ for (spp in unique(full_join$species)) {
   species_data <- full_join %>% filter(species == spp)
   
   ## Create plot for each organism
-  spp_plot <- ggplot(species_data, aes(x = n_per_100_m2_species, y = recruits_per_100_m2)) +
+  spp_plot <- ggplot(species_data, aes(y = n_per_100_m2_species, x = recruits_per_100_m2)) +
     geom_point(aes(color = year, shape = island)) +
     labs(
-      x = "number of adults",
-      y = "number of recruits",
+      y = "number of adults",
+      x = "number of recruits",
       title = spp
     ) +
     geom_smooth(method = "lm", se=FALSE, color = "black", size = 0.2) +

@@ -58,7 +58,7 @@ for (spp in unique(adult_data_fish$species)) {
 
 ```{r, echo=FALSE}
 wrap_plots(organism_plots_adult_fish, ncol = 2) +
-  plot_annotation(title =  expression(paste("Adult Fish: Number per 100", m^{2}," of reef"))) +
+  plot_annotation(title =  expression(paste("Fig. 1A: Adult Fish: Number of individuals per 100", m^{2}," of reef."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -94,7 +94,7 @@ for (spp in unique(adult_data_other$species)) {
 
 ```{r, echo=FALSE}
 wrap_plots(organism_plots_adult_other) +
-  plot_annotation(title =  expression(paste("Other Organisms: Amount of Bottom Covered (", m^{2}, ") per 100", m^{2}," of Reef"))) +
+  plot_annotation(title =  expression(paste("Fig. 1B: Other Organisms: Amount of Bottom Covered (", m^{2}, ") per 100", m^{2}," of Reef."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -131,7 +131,7 @@ for (spp in unique(young_data$fish)) {
 
 ```{r, echo=FALSE}
 wrap_plots(organism_plots_young, ncol = 2, height = 3) +
-  plot_annotation(title = expression(paste("Young Fish: Number of new recruits per 1", m^{2}," of preferred microhabitat"))) +
+  plot_annotation(title = expression(paste("Fig. 2: Young Fish: Number of new recruits per 1", m^{2}," of preferred microhabitat."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -187,7 +187,7 @@ for (spp in unique(full_join$species)) {
 
 ```{r, echo=FALSE}
 wrap_plots(density_comparison_plots) +
-  plot_annotation(title = "Density of Adults versus New Recruits per 100m2 of Reef") +
+  plot_annotation(title = expression(paste("Fig. 3: Density of Adults versus New Recruits per 100", m^{2}, " of Reef."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -215,7 +215,7 @@ for (spp in unique(full_join$species)) {
 
 ```{r, echo=FALSE}
 wrap_plots(density_microhabitat_plots) +
-  plot_annotation(title = "Area of Microhabitat versus Density of Adults per 100 m2 of Reef") +
+  plot_annotation(title = expression(paste("Fig. 4: Area of Microhabitat versus Density of Adults per 100" , m^{2}, " of Reef."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -243,7 +243,7 @@ for (spp in unique(full_join$species)) {
 
 ```{r, echo=FALSE}
 wrap_plots(density_per_microhabitat_plots) +
-  plot_annotation(title =  expression(paste("Number of adult fish per ", m^{2}," of microhabitat preferred by young"))) +
+  plot_annotation(title =  expression(paste("Fig. 5: Number of adult fish per ", m^{2}," of microhabitat preferred by young."))) +
   plot_layout(guides = "collect")
 ```
 
@@ -281,7 +281,7 @@ for (i in seq(dim(pairs)[2])) {
 
 ```{r, echo=FALSE}
 wrap_plots(pair_plots) +
-  plot_annotation(title =  "Comparing Adult Fish Densities between Species") +
+  plot_annotation(title =  "Fig. 6: Comparing Adult Fish Densities between Species.") +
   plot_layout(guides = "collect")
 ```
 
